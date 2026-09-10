@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import com.example.data.local.AppDatabase
 import com.example.data.local.dao.AccountDao
 import com.example.data.local.dao.TransactionDao
 import com.example.data.local.entity.AccountEntity
@@ -12,6 +13,12 @@ class ExpenseRepository(
 ) {
     val allAccounts: Flow<List<AccountEntity>> = accountDao.getAllAccounts()
     val allTransactions: Flow<List<TransactionEntity>> = transactionDao.getAllTransactions()
+
+    suspend fun checkAndSeedInitialData() {
+        if (accountDao.getAccountCount() == 0) {
+            AppDatabase.populateInitialData(accountDao, transactionDao)
+        }
+    }
 
     fun getTransactionsByAccount(accountId: Long): Flow<List<TransactionEntity>> {
         return transactionDao.getTransactionsByAccount(accountId)

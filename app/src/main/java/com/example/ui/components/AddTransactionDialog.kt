@@ -102,6 +102,15 @@ fun AddTransactionDialog(
     var targetAccountDropdownExpanded by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    androidx.compose.runtime.LaunchedEffect(accounts) {
+        if (selectedAccountId == 0L && accounts.isNotEmpty()) {
+            selectedAccountId = accounts.first().id
+        }
+        if (targetAccountId == null && accounts.isNotEmpty()) {
+            targetAccountId = accounts.getOrNull(1)?.id ?: accounts.first().id
+        }
+    }
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)

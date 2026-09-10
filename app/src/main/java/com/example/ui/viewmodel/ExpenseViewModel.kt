@@ -34,6 +34,16 @@ class ExpenseViewModel(
     private val _searchQuery = MutableStateFlow("")
     private val _userMessage = MutableStateFlow<String?>(null)
 
+    init {
+        viewModelScope.launch {
+            try {
+                repository.checkAndSeedInitialData()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     val uiState: StateFlow<ExpenseUiState> = combine(
         repository.allAccounts,

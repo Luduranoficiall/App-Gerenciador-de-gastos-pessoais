@@ -35,27 +35,14 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "gastos_pessoais_database"
                 )
-                .addCallback(DatabaseCallback(scope))
+                .fallbackToDestructiveMigration()
                 .build()
                 INSTANCE = instance
                 instance
             }
         }
 
-        private class DatabaseCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                INSTANCE?.let { database ->
-                    scope.launch(Dispatchers.IO) {
-                        populateInitialData(database.accountDao(), database.transactionDao())
-                    }
-                }
-            }
-        }
-
-        private suspend fun populateInitialData(
+        suspend fun populateInitialData(
             accountDao: AccountDao,
             transactionDao: TransactionDao
         ) {

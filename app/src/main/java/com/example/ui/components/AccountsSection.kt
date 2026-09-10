@@ -110,20 +110,48 @@ fun AccountsSection(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(accounts, key = { it.account.id }) { item ->
-                val isSelected = selectedAccountId == item.account.id
-                AccountCardItem(
-                    accountWithBalance = item,
-                    isSelected = isSelected,
-                    onClick = {
-                        if (isSelected) onAccountSelected(null) else onAccountSelected(item.account.id)
-                    },
-                    onDelete = { accountToDelete = item.account }
-                )
+        if (accounts.isEmpty()) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clickable { onAddAccountClick() },
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Toque aqui para cadastrar sua primeira conta ou carteira.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        } else {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(accounts, key = { it.account.id }) { item ->
+                    val isSelected = selectedAccountId == item.account.id
+                    AccountCardItem(
+                        accountWithBalance = item,
+                        isSelected = isSelected,
+                        onClick = {
+                            if (isSelected) onAccountSelected(null) else onAccountSelected(item.account.id)
+                        },
+                        onDelete = { accountToDelete = item.account }
+                    )
+                }
             }
         }
     }
