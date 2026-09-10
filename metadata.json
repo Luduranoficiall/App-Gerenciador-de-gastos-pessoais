@@ -1,0 +1,6 @@
+{
+  "name": "Gastos Pessoais",
+  "description": "Aplicativo para controle e gerenciamento de gastos pessoais, contas e transações financeiras com armazenamento local.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
